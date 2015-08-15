@@ -3,6 +3,8 @@
 # $Id $
 # SKV F814
 
+my $VER="1.2";
+
 ###############################################
 
 sub print_category
@@ -123,13 +125,15 @@ for( $i = 0; $i < 12; $i = $i + 1 )
 }
 
 
+my $warnings    = 0;
 my $lines       = 0;
 my $price_rec   = 0;
 my $max_month   = 0;
+my $max_day     = 0;
 
 #open OUTP, ">$outp";
 
-print "Reading $inp...\r";
+print "Reading $inp...\n";
 open RN, "<", $inp;
 
 while( <RN> )
@@ -141,7 +145,7 @@ while( <RN> )
 # N;Date;Sum;Category;Sub-Category;Owner;Descr;Quantity;Extra source;Comment
 # 2;2015.01.02;4.86;food;office;S;jogurt;;;
 
-    if( ! m#([0-9]+);([0-9]+\.)([0-9]+)(\.[0-9]+);([0-9\.]*);([a-zA-Z0-9 \.,]+);([a-zA-Z0-9 \.,]*);([A-Z]*);.*;([0-9]*);.*;# )
+    if( ! m#([0-9]+);([0-9]+\.)([0-9]+)\.([0-9]+);([0-9\.]*);([a-zA-Z0-9 \.,]+);([a-zA-Z0-9 \.,]*);([A-Z]*);.*;([0-9]*);.*;# )
     {
         next;
     }
@@ -149,6 +153,7 @@ while( <RN> )
 
     my $rec=$1;
     my $month=$3;
+    my $day=$4;
     my $val=$5;
     my $categ=$6;
     my $subcateg=$7;
@@ -158,19 +163,36 @@ while( <RN> )
 
     if( $val eq "" )
     {
+        $warning++;
         print STDERR "WARNING: record $rec has empty price\n";
         next;
     }
 
     if( $month eq "" )
     {
+        $warning++;
         print STDERR "WARNING: record $rec has empty month\n";
+        next;
+    }
+
+    if( $day eq "" )
+    {
+        $warning++;
+        print STDERR "WARNING: record $rec has empty day\n";
         next;
     }
 
     if( $month > $max_month )
     {
         $max_month = $month;
+        $max_day   = $day;
+    }
+    elsif( $month == $max_month )
+    {
+        if( $day > $max_day )
+        {
+            $max_day = $day;
+        }
     }
 
     $uniq_categ{$categ} += 1;
@@ -197,7 +219,13 @@ close RN;
 
 my @list_uniq_categ = sort keys %uniq_categ;
 
-print "SUMMARY: " . $#list_uniq_categ . " unique categories, " . ( 0 + $max_month ). " months, $lines lines read, $price_rec lines processed\n";
+my $compl_months = ( $max_month - 1 ) + ( $max_day / 30 );      # number of completed months
+
+print "SUMMARY:\n";
+print "unique categories : " . $#list_uniq_categ ."\n";
+print "months, days      : " . ( 0 + $max_month ). ", $max_day, completed months $compl_months\n";
+print "lines read        : $lines, $price_rec lines processed\n";
+print "warnings          : $warnings\n";
 
 print "\n";
 print "monthly\n";
@@ -206,10 +234,10 @@ print "\n";
 print_categories( \@list_uniq_categ, \@categ_mon );
 
 print "\n";
-print "averages - ". ( 0 + $max_month ) . " months\n";
+printf "averages - %.1f months\n", $compl_months;
 print "\n";
 
-print_categories_avg( \@list_uniq_categ, \@categ_mon, $max_month );
+print_categories_avg( \@list_uniq_categ, \@categ_mon, $compl_months );
 
 print "\n";
 
