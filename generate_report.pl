@@ -9,6 +9,10 @@ sub print_category
 {
 my $categ = shift;
 my $categ_mon_ref = shift;
+my $must_calc_avg = shift;
+my $max_month = shift;
+
+my $sum = 0;
 
 print "$categ;";
 
@@ -16,15 +20,26 @@ for( $i = 0; $i < 12; $i = $i + 1 )
 {
     my $map_categ_ref=$categ_mon_ref->[$i];
 
+    my $val = 0;
+
     if( exists $map_categ_ref->{$categ} )
     {
-        print $map_categ_ref->{$categ} . ";";
+        $val = $map_categ_ref->{$categ};
+    }
+
+    if( $must_calc_avg )
+    {
+        $sum += $val;
     }
     else
     {
-        print "0;";
+        print "$val;";
     }
+}
 
+if( $must_calc_avg )
+{
+    printf "%.1f;", ( $sum / $max_month );
 }
 
 print "\n";
@@ -32,16 +47,36 @@ print "\n";
 
 ###############################################
 
-sub print_categories
+sub print_categories_kern
 {
 my $list_uniq_categ_ref = shift;
 my $categ_mon_ref = shift;
+my $must_calc_avg = shift;
+my $max_month = shift;
 
 foreach $categ ( @{$list_uniq_categ_ref} )
 {
-    print_category( $categ, $categ_mon_ref );
+    print_category( $categ, $categ_mon_ref, $must_calc_avg, $max_month );
 }
 
+}
+###############################################
+
+sub print_categories
+{
+    my $list_uniq_categ_ref = shift;
+    my $categ_mon_ref = shift;
+
+    print_categories_kern( $list_uniq_categ_ref, $categ_mon_ref, 0, 0 );
+}
+
+sub print_categories_avg
+{
+    my $list_uniq_categ_ref = shift;
+    my $categ_mon_ref = shift;
+    my $max_month = shift;
+
+    print_categories_kern( $list_uniq_categ_ref, $categ_mon_ref, 1, $max_month );
 }
 
 ###############################################
@@ -90,6 +125,7 @@ for( $i = 0; $i < 12; $i = $i + 1 )
 
 my $lines       = 0;
 my $price_rec   = 0;
+my $max_month   = 0;
 
 #open OUTP, ">$outp";
 
@@ -132,6 +168,11 @@ while( <RN> )
         next;
     }
 
+    if( $month > $max_month )
+    {
+        $max_month = $month;
+    }
+
     $uniq_categ{$categ} += 1;
 
     my $map_categ_ref=$categ_mon[$month - 1];
@@ -156,11 +197,19 @@ close RN;
 
 my @list_uniq_categ = sort keys %uniq_categ;
 
-print "SUMMARY: " . $#list_uniq_categ . " unique categories, $lines lines read, $price_rec lines processed\n";
+print "SUMMARY: " . $#list_uniq_categ . " unique categories, " . ( 0 + $max_month ). " months, $lines lines read, $price_rec lines processed\n";
 
+print "\n";
+print "monthly\n";
 print "\n";
 
 print_categories( \@list_uniq_categ, \@categ_mon );
+
+print "\n";
+print "averages - ". ( 0 + $max_month ) . " months\n";
+print "\n";
+
+print_categories_avg( \@list_uniq_categ, \@categ_mon, $max_month );
 
 print "\n";
 
