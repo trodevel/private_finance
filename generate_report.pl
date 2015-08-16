@@ -5,8 +5,9 @@
 
 # 1.3 - F816 - added calculation of statistics for sub-categories
 # 1.4 - F816 - added calculation of statistics for owners
+# 1.5 - F816 - minor: added create_key()
 
-my $VER="1.4";
+my $VER="1.5";
 
 ###############################################
 
@@ -110,6 +111,17 @@ sub update_categ
 
 #    print "DBG: $month, $categ, $val\n";       # DBG
 #    print "DBG: $month, $categ, map: " . $map_categ_ref->{$categ} . "\n";       # DBG
+}
+
+###############################################
+
+sub create_key
+{
+    my $first   = shift;
+    my $second  = shift;
+    my $res     = ( $second eq "" ) ? $first : $first . "-" . $second;
+
+    return $res;
 }
 
 ###############################################
@@ -226,8 +238,8 @@ while( <RN> )
         }
     }
 
-    my $categ_subcateg = ( $subcateg eq "" ) ? $categ : $categ . "-" . $subcateg;
-    my $categ_owner    = ( $owner eq "" ) ? $categ : $categ . "-" . $owner;
+    my $categ_subcateg = create_key( $categ, $subcateg );
+    my $categ_owner    = create_key( $categ, $owner );
 
     $uniq_categ{$categ} += 1;
     $uniq_categ_subcateg{$categ_subcateg} += 1;
