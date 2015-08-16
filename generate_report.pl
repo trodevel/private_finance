@@ -4,8 +4,9 @@
 # SKV F814
 
 # 1.3 - F816 - added calculation of statistics for sub-categories
+# 1.4 - F816 - added calculation of statistics for owners
 
-my $VER="1.2";
+my $VER="1.4";
 
 ###############################################
 
@@ -141,16 +142,17 @@ my @mon_categ_owner=();
 
 my %uniq_categ;
 my %uniq_categ_subcateg;
-#my %map_categ_owner;
+my %uniq_categ_owner;
 
 for( $i = 0; $i < 12; $i = $i + 1 )
 {
     my %map_categ;
     my %map_categ_subcateg;
+    my %map_categ_owner;
 
     push( @mon_categ, \%map_categ );
     push( @mon_categ_subcateg, \%map_categ_subcateg );
-#    push( @mon_categ_subcateg, %map_categ_subcateg );
+    push( @mon_categ_owner, \%map_categ_owner );
 }
 
 
@@ -225,12 +227,15 @@ while( <RN> )
     }
 
     my $categ_subcateg = ( $subcateg eq "" ) ? $categ : $categ . "-" . $subcateg;
+    my $categ_owner    = ( $owner eq "" ) ? $categ : $categ . "-" . $owner;
 
     $uniq_categ{$categ} += 1;
     $uniq_categ_subcateg{$categ_subcateg} += 1;
+    $uniq_categ_owner{$categ_owner} += 1;
 
     update_categ( \@mon_categ, $month, $categ, $val );
     update_categ( \@mon_categ_subcateg, $month, $categ_subcateg, $val );
+    update_categ( \@mon_categ_owner, $month, $categ_owner, $val );
 }
 
 close RN;
@@ -241,12 +246,14 @@ close RN;
 
 my @list_uniq_categ = sort keys %uniq_categ;
 my @list_uniq_categ_subcateg = sort keys %uniq_categ_subcateg;
+my @list_uniq_categ_owner = sort keys %uniq_categ_owner;
 
 my $compl_months = ( $max_month - 1 ) + ( $max_day / 30 );      # number of completed months
 
 print "SUMMARY:\n";
 print "unique categories     : " . $#list_uniq_categ ."\n";
 print "unique categ/subcateg : " . $#list_uniq_categ .", ". $#list_uniq_categ_subcateg ."\n";
+print "unique categ/owner    : " . $#list_uniq_categ .", ". $#list_uniq_categ_owner ."\n";
 print "months, days          : " . ( 0 + $max_month ). ", $max_day, completed months $compl_months\n";
 print "lines read            : $lines, $price_rec lines processed\n";
 print "warnings              : $warnings\n";
@@ -274,6 +281,12 @@ printf "averages (subcateg) - %.1f months\n", $compl_months;
 print "\n";
 
 print_categories_avg( \@list_uniq_categ_subcateg, \@mon_categ_subcateg, $compl_months );
+
+print "\n";
+printf "averages (owner) - %.1f months\n", $compl_months;
+print "\n";
+
+print_categories_avg( \@list_uniq_categ_owner, \@mon_categ_owner, $compl_months );
 
 print "\n";
 
