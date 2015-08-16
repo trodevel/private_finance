@@ -6,8 +6,9 @@
 # 1.3 - F816 - added calculation of statistics for sub-categories
 # 1.4 - F816 - added calculation of statistics for owners
 # 1.5 - F816 - minor: added create_key()
+# 1.6 - F816 - minor: added print_report_all_months(), print_report_avg()
 
-my $VER="1.5";
+my $VER="1.6";
 
 ###############################################
 
@@ -111,6 +112,36 @@ sub update_categ
 
 #    print "DBG: $month, $categ, $val\n";       # DBG
 #    print "DBG: $month, $categ, map: " . $map_categ_ref->{$categ} . "\n";       # DBG
+}
+
+###############################################
+
+sub print_report_all_months
+{
+    my $title           = shift;
+    my $list_categ_ref  = shift;
+    my $monthly_exp_ref = shift;
+    print "\n";
+    print "$title\n";
+    print "\n";
+
+    print_categories( $list_categ_ref, $monthly_exp_ref );
+}
+
+###############################################
+
+sub print_report_avg
+{
+    my $title           = shift;
+    my $list_categ_ref  = shift;
+    my $monthly_exp_ref = shift;
+    my $num_months      = shift;
+
+    print "\n";
+    printf "%s - %.1f months\n", $title, $num_months;
+    print "\n";
+
+    print_categories_avg( $list_categ_ref, $monthly_exp_ref, $num_months );
 }
 
 ###############################################
@@ -270,35 +301,12 @@ print "months, days          : " . ( 0 + $max_month ). ", $max_day, completed mo
 print "lines read            : $lines, $price_rec lines processed\n";
 print "warnings              : $warnings\n";
 
-print "\n";
-print "monthly\n";
-print "\n";
+print_report_all_months( "monthly",            \@list_uniq_categ,          \@mon_categ );
+print_report_all_months( "monthly (subcateg)", \@list_uniq_categ_subcateg, \@mon_categ_subcateg );
 
-print_categories( \@list_uniq_categ, \@mon_categ );
-
-print "\n";
-print "monthly (subcateg)\n";
-print "\n";
-
-print_categories( \@list_uniq_categ_subcateg, \@mon_categ_subcateg );
-
-print "\n";
-printf "averages - %.1f months\n", $compl_months;
-print "\n";
-
-print_categories_avg( \@list_uniq_categ, \@mon_categ, $compl_months );
-
-print "\n";
-printf "averages (subcateg) - %.1f months\n", $compl_months;
-print "\n";
-
-print_categories_avg( \@list_uniq_categ_subcateg, \@mon_categ_subcateg, $compl_months );
-
-print "\n";
-printf "averages (owner) - %.1f months\n", $compl_months;
-print "\n";
-
-print_categories_avg( \@list_uniq_categ_owner, \@mon_categ_owner, $compl_months );
+print_report_avg( "averages",            \@list_uniq_categ,          \@mon_categ,          $compl_months );
+print_report_avg( "averages (subcateg)", \@list_uniq_categ_subcateg, \@mon_categ_subcateg, $compl_months );
+print_report_avg( "averages (owner)",    \@list_uniq_categ_owner,    \@mon_categ_owner,    $compl_months );
 
 print "\n";
 
