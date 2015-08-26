@@ -7,8 +7,9 @@
 # 1.4 - F816 - added calculation of statistics for owners
 # 1.5 - F816 - minor: added create_key()
 # 1.6 - F816 - minor: added print_report_all_months(), print_report_avg()
+# 1.7 - F826 - used "?" for undefined subcategory, minor refinements in output
 
-my $VER="1.6";
+my $VER="1.7";
 
 ###############################################
 
@@ -150,12 +151,14 @@ sub create_key
 {
     my $first   = shift;
     my $second  = shift;
-    my $res     = ( $second eq "" ) ? $first : $first . "-" . $second;
+    my $res     = ( $second eq "" ) ? $first . "-?" : $first . "-" . $second;
 
     return $res;
 }
 
 ###############################################
+
+print "generate_report ver. $VER\n";
 
 $num_args = $#ARGV + 1;
 if( $num_args != 1 )
@@ -293,12 +296,14 @@ my @list_uniq_categ_owner = sort keys %uniq_categ_owner;
 
 my $compl_months = ( $max_month - 1 ) + ( $max_day / 30 );      # number of completed months
 
+print "\n";
 print "SUMMARY:\n";
 print "unique categories     : " . $#list_uniq_categ ."\n";
 print "unique categ/subcateg : " . $#list_uniq_categ .", ". $#list_uniq_categ_subcateg ."\n";
 print "unique categ/owner    : " . $#list_uniq_categ .", ". $#list_uniq_categ_owner ."\n";
-print "months, days          : " . ( 0 + $max_month ). ", $max_day, completed months $compl_months\n";
-print "lines read            : $lines, $price_rec lines processed\n";
+printf "months, days          : %d, %d, completed months %.1f\n", $max_month, $max_day, $compl_months;
+
+print "lines read/processed  : $lines, $price_rec\n";
 print "warnings              : $warnings\n";
 
 print_report_all_months( "monthly",            \@list_uniq_categ,          \@mon_categ );
