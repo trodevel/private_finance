@@ -8,8 +8,9 @@
 # 1.5 - F816 - minor: added create_key()
 # 1.6 - F816 - minor: added print_report_all_months(), print_report_avg()
 # 1.7 - F826 - used "?" for undefined subcategory, minor refinements in output
+# 1.8 - FB08 - bugfix: category name may contain underscore, colon
 
-my $VER="1.7";
+my $VER="1.8";
 
 ###############################################
 
@@ -222,7 +223,7 @@ while( <RN> )
 # N;Date;Sum;Category;Sub-Category;Owner;Descr;Quantity;Extra source;Comment
 # 2;2015.01.02;4.86;food;office;S;jogurt;;;
 
-    if( ! m#([0-9]+);([0-9]+\.)([0-9]+)\.([0-9]+);([0-9\.]*);([a-zA-Z0-9 \.,]+);([a-zA-Z0-9 \.,]*);([A-Z]*);.*;([0-9]*);.*;# )
+    if( ! m#([0-9]+);([0-9]+\.)([0-9]+)\.([0-9]+);([0-9\.]*);([a-zA-Z0-9 \.,_:]+);([a-zA-Z0-9 _\.,]*);([A-Z]*);.*;([0-9]*);.*;# )
     {
         next;
     }
