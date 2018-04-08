@@ -13,8 +13,9 @@ use warnings;
 # 1.7 - F826 - used "?" for undefined subcategory, minor refinements in output
 # 1.8 - FB08 - bugfix: category name may contain underscore, colon
 # 1.9 - 18409 - fixed perl warnings
+# 1.10 - 18409 - 1. added calculation of totals 2. added output of table headers
 
-my $VER="1.9";
+my $VER="1.10";
 
 ###############################################
 
@@ -24,6 +25,7 @@ my $categ = shift;
 my $categ_mon_ref = shift;
 my $must_calc_avg = shift;
 my $max_month = shift;
+my $must_calc_total = shift;
 
 my $sum = 0;
 
@@ -40,11 +42,12 @@ for( my $i = 0; $i < 12; $i = $i + 1 )
         $val = $map_categ_ref->{$categ};
     }
 
-    if( $must_calc_avg )
+    if( $must_calc_avg || $must_calc_total )
     {
         $sum += $val;
     }
-    else
+
+    if( ! $must_calc_avg )
     {
         print "$val;";
     }
@@ -53,6 +56,11 @@ for( my $i = 0; $i < 12; $i = $i + 1 )
 if( $must_calc_avg )
 {
     printf "%.1f;", ( $sum / $max_month );
+}
+
+if( $must_calc_total )
+{
+    printf "$sum;";
 }
 
 print "\n";
@@ -66,10 +74,11 @@ my $list_uniq_categ_ref = shift;
 my $categ_mon_ref = shift;
 my $must_calc_avg = shift;
 my $max_month = shift;
+my $must_calc_total = shift;
 
 foreach my $categ ( @{$list_uniq_categ_ref} )
 {
-    print_category( $categ, $categ_mon_ref, $must_calc_avg, $max_month );
+    print_category( $categ, $categ_mon_ref, $must_calc_avg, $max_month, $must_calc_total );
 }
 
 }
@@ -80,7 +89,7 @@ sub print_categories
     my $list_uniq_categ_ref = shift;
     my $categ_mon_ref = shift;
 
-    print_categories_kern( $list_uniq_categ_ref, $categ_mon_ref, 0, 0 );
+    print_categories_kern( $list_uniq_categ_ref, $categ_mon_ref, 0, 0, 1 );
 }
 
 sub print_categories_avg
@@ -89,7 +98,7 @@ sub print_categories_avg
     my $categ_mon_ref = shift;
     my $max_month = shift;
 
-    print_categories_kern( $list_uniq_categ_ref, $categ_mon_ref, 1, $max_month );
+    print_categories_kern( $list_uniq_categ_ref, $categ_mon_ref, 1, $max_month, 0 );
 }
 
 ###############################################
@@ -122,6 +131,19 @@ sub update_categ
 
 ###############################################
 
+sub print_header_all_months
+{
+    print "category;1;2;3;4;5;6;7;8;9;10;11;12;total;\n";
+}
+
+###############################################
+
+sub print_header_averages
+{
+    print "category;average;\n";
+}
+
+###############################################
 sub print_report_all_months
 {
     my $title           = shift;
@@ -130,6 +152,8 @@ sub print_report_all_months
     print "\n";
     print "$title\n";
     print "\n";
+
+    print_header_all_months();
 
     print_categories( $list_categ_ref, $monthly_exp_ref );
 }
@@ -147,10 +171,13 @@ sub print_report_avg
     printf "%s - %.1f months\n", $title, $num_months;
     print "\n";
 
+    print_header_averages();
+
     print_categories_avg( $list_categ_ref, $monthly_exp_ref, $num_months );
 }
 
 ###############################################
+
 
 sub create_key
 {
