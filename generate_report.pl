@@ -1,5 +1,8 @@
 #!/usr/bin/perl -w
 
+use strict;
+use warnings;
+
 # $Id $
 # SKV F814
 
@@ -9,8 +12,9 @@
 # 1.6 - F816 - minor: added print_report_all_months(), print_report_avg()
 # 1.7 - F826 - used "?" for undefined subcategory, minor refinements in output
 # 1.8 - FB08 - bugfix: category name may contain underscore, colon
+# 1.9 - 18409 - fixed perl warnings
 
-my $VER="1.8";
+my $VER="1.9";
 
 ###############################################
 
@@ -25,7 +29,7 @@ my $sum = 0;
 
 print "$categ;";
 
-for( $i = 0; $i < 12; $i = $i + 1 )
+for( my $i = 0; $i < 12; $i = $i + 1 )
 {
     my $map_categ_ref=$categ_mon_ref->[$i];
 
@@ -63,7 +67,7 @@ my $categ_mon_ref = shift;
 my $must_calc_avg = shift;
 my $max_month = shift;
 
-foreach $categ ( @{$list_uniq_categ_ref} )
+foreach my $categ ( @{$list_uniq_categ_ref} )
 {
     print_category( $categ, $categ_mon_ref, $must_calc_avg, $max_month );
 }
@@ -161,14 +165,14 @@ sub create_key
 
 print "generate_report ver. $VER\n";
 
-$num_args = $#ARGV + 1;
+my $num_args = $#ARGV + 1;
 if( $num_args != 1 )
 {
     print STDERR "\nUsage: generate_report.sh <source_file.csv>\n";
     exit;
 }
 
-$inp = $ARGV[0];
+my $inp = $ARGV[0];
 shift( @ARGV );
 
 #print STDERR "DEBUG: inp = $inp\n";
@@ -191,7 +195,7 @@ my %uniq_categ;
 my %uniq_categ_subcateg;
 my %uniq_categ_owner;
 
-for( $i = 0; $i < 12; $i = $i + 1 )
+for( my $i = 0; $i < 12; $i = $i + 1 )
 {
     my %map_categ;
     my %map_categ_subcateg;
