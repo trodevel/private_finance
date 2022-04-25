@@ -72,10 +72,12 @@ sub process($$)
         next if $line =~ /^#/;
 
         process_line( $line, $file_out );
-}
+    }
 
-close $file_in;
-close $file_out;
+    print "INFO: read $num_lines line(s) from file $filename_in\n";
+
+    close $file_in;
+    close $file_out;
 
 }
 ###############################################
