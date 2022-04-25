@@ -76,7 +76,7 @@ sub process($$)
     my $except_lines=0;
     my $resrc_lines=0;
 
-    print "Reading resources $filename_in ...\n";
+    print "INFO: reading file $filename_in ...\n";
 
     open( my $file_in, '<:encoding(utf8)', $filename_in ) or die "Could not open '$filename_in' $!\n";
 
