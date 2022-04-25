@@ -55,9 +55,11 @@ sub process($$)
 
     open( my $file_in, '<:encoding(utf8)', $filename_in ) or die "Could not open '$filename_in' $!\n";
 
-    open( my $file_out, "> $outp" ) or die "Couldn't open file for writing: $!\n";
+    open( my $file_out, "> $filename_out" ) or die "Couldn't open file for writing: $!\n";
 
     binmode( $file_out, "encoding(UTF-8)" );
+
+    my $line;
 
     while( $file_in )
     {
