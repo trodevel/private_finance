@@ -32,13 +32,38 @@ use 5.010;
 
 ###############################################
 
+sub extract_day($$$)
+{
+    my ( $tokens_ref, $offset, $size ) = @_;
+
+    my @tokens = @{ $tokens_ref };
+
+    if( $offset >= $size )
+    {
+        return ( 0, $offset, 0 );
+    }
+
+    return ( 0, 0, 0 );
+}
+
+###############################################
+
 sub process_line($$$)
 {
     my ( $line, $line_num, $file_out ) = @_;
 
+    print "DEBUG: processing line $line_num: $line\n";
+
     my @tokens = split( /\s+/, $line);
 
-    print "DEBUG: processing line $line_num: $line\n";
+    my $size = scalar @tokens;
+
+    my ( $is_ok, $new_offset, $day ) = extract_day( \@tokens, 0, $size );
+
+    if( $is_ok eq 0 )
+    {
+        print "INFO: cannot extract date from line $line_num: $line\n";
+    }
 }
 
 ###############################################
