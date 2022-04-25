@@ -19,9 +19,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-# $Id $
-# SKV FB10
-
 # 1.0 - 22425 - initial commit
 
 ###############################################
