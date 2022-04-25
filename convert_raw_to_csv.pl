@@ -59,9 +59,7 @@ sub process($$)
 
     binmode( $file_out, "encoding(UTF-8)" );
 
-    my $line;
-
-    while( $file_in )
+    while( my $line = <$file_in> )
     {
         chomp $line;
         $num_lines++;
