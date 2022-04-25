@@ -32,13 +32,13 @@ use 5.010;
 
 ###############################################
 
-sub process_line($$)
+sub process_line($$$)
 {
-    my ( $line, $file_out ) = @_;
+    my ( $line, $line_num, $file_out ) = @_;
 
     my @tokens = split( /\s+/, $line);
 
-
+    print "DEBUG: processing line $line_num: $line\n";
 }
 
 ###############################################
@@ -71,7 +71,7 @@ sub process($$)
         # skip comments
         next if $line =~ /^#/;
 
-        process_line( $line, $file_out );
+        process_line( $line, $num_lines, $file_out );
     }
 
     print "INFO: read $num_lines line(s) from file $filename_in\n";
