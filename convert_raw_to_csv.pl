@@ -29,7 +29,7 @@ use 5.010;
 
 ###############################################
 
-sub extract_day($$$)
+sub get_integer($$$)
 {
     my ( $tokens_ref, $offset, $size ) = @_;
 
@@ -40,7 +40,34 @@ sub extract_day($$$)
         return ( 0, $offset, 0 );
     }
 
+    my $val_raw = $tokens[ $offset ];
+
+    if( $val_raw =~ /^[+-]?\d+$/ )
+    {
+        my $val = $val_raw + 0;
+
+        return ( 1, $offset + 1, $val );
+    }
+
     return ( 0, 0, 0 );
+}
+
+###############################################
+
+sub extract_day($$$)
+{
+    my ( $tokens_ref, $offset, $size ) = @_;
+
+    my ( $is_ok, $new_offset, $day ) = get_integer( $tokens_ref, $offset, $size );
+
+    if( $is_ok eq 1 )
+    {
+        print "DEBUG: extracted day $day\n";
+
+        return ( 1, $new_offset, $day );
+    }
+
+    return ( 0, $offset, 0 );
 }
 
 ###############################################
