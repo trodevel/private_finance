@@ -69,7 +69,7 @@ sub get_integer($$$)
 
     my $val_raw = $tokens[ $offset ];
 
-    if( $val_raw =~ /^[+-]?\d+$/ )
+    if( is_integer( $val_raw ) )
     {
         my $val = $val_raw + 0;
 
