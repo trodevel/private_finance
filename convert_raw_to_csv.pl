@@ -103,35 +103,7 @@ sub extract_month($$$)
 {
     my ( $tokens_ref, $offset, $size ) = @_;
 
-    my @tokens = @{ $tokens_ref };
-
-    if( $offset >= $size )
-    {
-        return ( 0, $offset, 0 );
-    }
-
-    my $val_raw = $tokens[ $offset ];
-
-    my $is_ok = 0;
-    my $new_offset = 0;
-    my $val = 0;
-
-    if( is_integer( $val_raw ) )
-    {
-        $val = $val_raw + 0;
-
-        $is_ok = 1;
-        $new_offset = $offset + 1;
-    }
-    elsif( is_float( $val_raw ) )
-    {
-        $val = $val_raw + 0;
-
-        $val = int( $val );
-
-        $is_ok = 1;
-        $new_offset = $offset;
-    }
+    my ( $is_ok, $new_offset, $val ) = get_integer( $tokens_ref, $offset, $size );
 
     if( $is_ok eq 1 )
     {
@@ -160,6 +132,8 @@ sub process_line($$$)
     if( $is_ok eq 0 )
     {
         print "INFO: cannot extract date from line $line_num: $line\n";
+
+        return;
     }
 }
 
