@@ -29,6 +29,33 @@ use 5.010;
 
 ###############################################
 
+sub is_integer($)
+{
+    my ( $val ) = @_;
+
+    return $val =~ /^[+-]?\d+$/;
+}
+
+###############################################
+
+sub is_float($)
+{
+    my ( $val ) = @_;
+
+    return $val =~ /^[+-]?\d+(\.\d+)?$/;
+}
+
+###############################################
+
+sub does_start_with_number($)
+{
+    my ( $val ) = @_;
+
+    return $val =~ /^[+-]?\d+[a-zA-Z\.]*$/;
+}
+
+###############################################
+
 sub get_integer($$$)
 {
     my ( $tokens_ref, $offset, $size ) = @_;
@@ -58,13 +85,87 @@ sub extract_day($$$)
 {
     my ( $tokens_ref, $offset, $size ) = @_;
 
-    my ( $is_ok, $new_offset, $day ) = get_integer( $tokens_ref, $offset, $size );
+    my @tokens = @{ $tokens_ref };
+
+    if( $offset >= $size )
+    {
+        return ( 0, $offset, 0 );
+    }
+
+    my $val_raw = $tokens[ $offset ];
+
+    my $is_ok = 0;
+    my $new_offset = 0;
+    my $val = 0;
+
+    if( is_integer( $val_raw ) )
+    {
+        $val = $val_raw + 0;
+
+        $is_ok = 1;
+        $new_offset = $offset + 1;
+    }
+    elsif( is_float( $val_raw ) )
+    {
+        $val = $val_raw + 0;
+
+        $val = int( $val );
+
+        $is_ok = 1;
+        $new_offset = $offset;
+    }
 
     if( $is_ok eq 1 )
     {
-        print "DEBUG: extracted day $day\n";
+        print "DEBUG: extracted day $val\n";
 
-        return ( 1, $new_offset, $day );
+        return ( 1, $new_offset, $val );
+    }
+
+    return ( 0, $offset, 0 );
+}
+
+###############################################
+
+sub extract_month($$$)
+{
+    my ( $tokens_ref, $offset, $size ) = @_;
+
+    my @tokens = @{ $tokens_ref };
+
+    if( $offset >= $size )
+    {
+        return ( 0, $offset, 0 );
+    }
+
+    my $val_raw = $tokens[ $offset ];
+
+    my $is_ok = 0;
+    my $new_offset = 0;
+    my $val = 0;
+
+    if( is_integer( $val_raw ) )
+    {
+        $val = $val_raw + 0;
+
+        $is_ok = 1;
+        $new_offset = $offset + 1;
+    }
+    elsif( is_float( $val_raw ) )
+    {
+        $val = $val_raw + 0;
+
+        $val = int( $val );
+
+        $is_ok = 1;
+        $new_offset = $offset;
+    }
+
+    if( $is_ok eq 1 )
+    {
+        print "DEBUG: extracted month $val\n";
+
+        return ( 1, $new_offset, $val );
     }
 
     return ( 0, $offset, 0 );
