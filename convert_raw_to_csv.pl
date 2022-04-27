@@ -85,26 +85,7 @@ sub extract_day($$$)
 {
     my ( $tokens_ref, $offset, $size ) = @_;
 
-    my @tokens = @{ $tokens_ref };
-
-    if( $offset >= $size )
-    {
-        return ( 0, $offset, 0 );
-    }
-
-    my $val_raw = $tokens[ $offset ];
-
-    my $is_ok = 0;
-    my $new_offset = 0;
-    my $val = 0;
-
-    if( is_integer( $val_raw ) )
-    {
-        $val = $val_raw + 0;
-
-        $is_ok = 1;
-        $new_offset = $offset + 1;
-    }
+    my ( $is_ok, $new_offset, $val ) = get_integer( $tokens_ref, $offset, $size );
 
     if( $is_ok eq 1 )
     {
