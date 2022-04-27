@@ -170,7 +170,7 @@ sub process_line($$$)
 
     print "DEBUG: processing line $line_num: $line\n";
 
-    my @tokens = split( /\s+./, $line);
+    my @tokens = split( /[\s\.]+/, $line);
 
     my $size = scalar @tokens;
 
