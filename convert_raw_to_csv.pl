@@ -105,15 +105,6 @@ sub extract_day($$$)
         $is_ok = 1;
         $new_offset = $offset + 1;
     }
-    elsif( is_float( $val_raw ) )
-    {
-        $val = $val_raw + 0;
-
-        $val = int( $val );
-
-        $is_ok = 1;
-        $new_offset = $offset;
-    }
 
     if( $is_ok eq 1 )
     {
