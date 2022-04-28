@@ -41,6 +41,15 @@ sub validate_integer($$$)
 
 ###############################################
 
+sub validate_day($)
+{
+    my ( $val ) = @_;
+
+    return validate_integer( $val, 1, 31 );
+}
+
+###############################################
+
 sub is_integer($)
 {
     my ( $val ) = @_;
