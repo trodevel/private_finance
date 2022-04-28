@@ -317,6 +317,7 @@ sub process_line($$$)
     my $year = 0;
     my $price_int = 0;
     my $price_frac = 0;
+    my $category = "";
 
     ( $is_ok, $offset, $day ) = extract_day( \@tokens, 0, $size );
 
@@ -363,7 +364,16 @@ sub process_line($$$)
         return;
     }
 
-    my ( $is_valid, $error_msg ) = validate( $day, $month, $year, $price_int, $price_frac, "", "" );
+    ( $is_ok, $offset, $category ) = extract_identifier( \@tokens, $offset, $size );
+
+    if( $is_ok == 0 )
+    {
+        print "INFO: cannot extract category from line $line_num: $line\n";
+
+        return;
+    }
+
+    my ( $is_valid, $error_msg ) = validate( $day, $month, $year, $price_int, $price_frac, $category, "" );
 
     if( $is_valid == 0 )
     {
