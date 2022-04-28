@@ -127,11 +127,39 @@ sub process_line($$$)
 
     my $size = scalar @tokens;
 
-    my ( $is_ok, $new_offset, $day ) = extract_day( \@tokens, 0, $size );
+    if( $size == 0 )
+    {
+        print "ERROR: empty line $line_num\n";
+
+        return;
+    }
+
+    if( is_integer( $tokens[0] ) == 0 )
+    {
+        print "WARNING: ignoring line $line_num: $line\n";
+
+        return;
+    }
+
+    my $is_ok = 0;
+    my $offset = 0;
+    my $day = 0;
+    my $month = 0;
+
+    ( $is_ok, $offset, $day ) = extract_day( \@tokens, 0, $size );
 
     if( $is_ok eq 0 )
     {
         print "INFO: cannot extract date from line $line_num: $line\n";
+
+        return;
+    }
+
+    ( $is_ok, $offset, $month ) = extract_month( \@tokens, $offset, $size );
+
+    if( $is_ok eq 0 )
+    {
+        print "INFO: cannot extract month from line $line_num: $line\n";
 
         return;
     }
