@@ -295,7 +295,7 @@ sub process_line($$$)
 
     if( $is_valid eq 0 )
     {
-        print "ERROR: line not valid: $error_msg - $line_num: $line\n";
+        print "ERROR: line not valid $line_num: $error_msg: $line\n";
 
         return;
     }
