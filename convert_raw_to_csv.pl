@@ -120,6 +120,24 @@ sub get_integer($$$)
 
 ###############################################
 
+sub get_string($$$)
+{
+    my ( $tokens_ref, $offset, $size ) = @_;
+
+    my @tokens = @{ $tokens_ref };
+
+    if( $offset >= $size )
+    {
+        return ( 0, $offset, 0 );
+    }
+
+    my $val = $tokens[ $offset ];
+
+    return ( 1, $offset + 1, $val );
+}
+
+###############################################
+
 sub extract_day($$$)
 {
     my ( $tokens_ref, $offset, $size ) = @_;
@@ -195,6 +213,47 @@ sub extract_price_part($$$)
     }
 
     return ( 0, $offset, 0 );
+}
+
+###############################################
+
+sub extract_identifier($$$)
+{
+    my ( $tokens_ref, $offset, $size ) = @_;
+
+    my $is_ok = 0;
+    my $new_offset = 0;
+    my $val;
+
+    ( $is_ok, $new_offset, $val ) = get_string( $tokens_ref, $offset, $size );
+
+    if( $is_ok == 0 )
+    {
+        return ( 0, $offset, 0 );
+    }
+
+    my $res = $val;
+
+    while( 1 )
+    {
+        $offset = $new_offset;
+
+        ( $is_ok, $new_offset, $val ) = get_string( $tokens_ref, $offset, $size );
+
+        break if( $is_ok == 0 );
+
+        break if( is_id_connector( $val ) == 0 );
+
+        ( $is_ok, $new_offset, $val ) = get_string( $tokens_ref, $new_offset, $size );
+
+        return ( 0, $offset, "" ) if( $is_ok == 0 )
+
+        $res += "_${val}";
+    }
+
+    print "DEBUG: extracted identifier $res\n";
+
+    return ( 1, $offset, $res );
 }
 
 ###############################################
