@@ -181,6 +181,20 @@ sub extract_year($$$)
 
 ###############################################
 
+sub validate($$$$$$$)
+{
+    my ( $day, $month, $year, $price_int, $price_frac, $categ, $subcateg ) = @_;
+
+    return ( 0, "invalid day" )   if validate_day( $day ) == 0;
+    return ( 0, "invalid month" ) if validate_month( $month ) == 0;
+    return ( 0, "invalid year" )  if validate_year( $year ) == 0;
+#    return ( 0, "invalid price_int" ) if validate_price_int( $price_int ) == 0;
+
+    return ( 1, "" );
+}
+
+###############################################
+
 sub process_line($$$)
 {
     my ( $line, $line_num, $file_out ) = @_;
@@ -234,6 +248,15 @@ sub process_line($$$)
     if( $is_ok eq 0 )
     {
         print "INFO: cannot extract year from line $line_num: $line\n";
+
+        return;
+    }
+
+    my ( $is_valid, $error_msg ) = validate( $day, $month, $year, 0, 0, "", "" );
+
+    if( $is_valid eq 0 )
+    {
+        print "ERROR: line not valid: $error_msg - $line_num: $line\n";
 
         return;
     }
