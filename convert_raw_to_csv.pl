@@ -97,6 +97,17 @@ sub is_id_connector($)
 
 ###############################################
 
+sub is_id_empty($)
+{
+    my ( $val ) = @_;
+
+    $val = lc $val;
+
+    return $val =~ /^nix$/ or $val =~ /^leer$/;
+}
+
+###############################################
+
 sub does_start_with_number($)
 {
     my ( $val ) = @_;
@@ -242,6 +253,8 @@ sub extract_identifier($$$)
     {
         return ( 0, $offset, 0 );
     }
+
+    return ( 1, $new_offset, "" ) if( is_id_empty( $val ) );
 
     my $res = $val;
 
