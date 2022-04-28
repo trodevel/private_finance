@@ -207,7 +207,7 @@ sub validate($$$$$$$)
     return ( 0, "invalid month" ) if validate_month( $month ) == 0;
     return ( 0, "invalid year" )  if validate_year( $year ) == 0;
     return ( 0, "invalid price_int" )  if validate_integer( $price_int, -2000, 2000 ) == 0;
-    return ( 0, "invalid price_frac" ) if validate_integer( $price_int, 0, 99 ) == 0;
+    return ( 0, "invalid price_frac" ) if validate_integer( $price_frac, 0, 99 ) == 0;
 
     return ( 1, "" );
 }
