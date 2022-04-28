@@ -59,6 +59,15 @@ sub validate_month($)
 
 ###############################################
 
+sub validate_year($)
+{
+    my ( $val ) = @_;
+
+    return validate_integer( $val, 2015, 2030 );
+}
+
+###############################################
+
 sub is_integer($)
 {
     my ( $val ) = @_;
