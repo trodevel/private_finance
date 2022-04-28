@@ -284,9 +284,9 @@ sub extract_identifier($$$)
 
 ###############################################
 
-sub validate($$$$$$$)
+sub validate($$$$$$$$)
 {
-    my ( $day, $month, $year, $price_int, $price_frac, $categ, $subcateg ) = @_;
+    my ( $day, $month, $year, $price_int, $price_frac, $categ, $subcateg, $owner ) = @_;
 
     return ( 0, "invalid day" )   if validate_day( $day ) == 0;
     return ( 0, "invalid month" ) if validate_month( $month ) == 0;
@@ -406,7 +406,7 @@ sub process_line($$$)
         return;
     }
 
-    my ( $is_valid, $error_msg ) = validate( $day, $month, $year, $price_int, $price_frac, $category, $sub_category );
+    my ( $is_valid, $error_msg ) = validate( $day, $month, $year, $price_int, $price_frac, $category, $sub_category, $owner );
 
     if( $is_valid == 0 )
     {
