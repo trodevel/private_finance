@@ -29,6 +29,18 @@ use 5.010;
 
 ###############################################
 
+sub validate_integer($$$)
+{
+    my ( $val, $min, $max ) = @_;
+
+    return 0 if( $val < $min );
+    return 0 if( $val > $max );
+
+    return 1;
+}
+
+###############################################
+
 sub is_integer($)
 {
     my ( $val ) = @_;
