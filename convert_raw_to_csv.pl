@@ -206,8 +206,8 @@ sub validate($$$$$$$)
     return ( 0, "invalid day" )   if validate_day( $day ) == 0;
     return ( 0, "invalid month" ) if validate_month( $month ) == 0;
     return ( 0, "invalid year" )  if validate_year( $year ) == 0;
-    return ( 0, "invalid price_int" )  if validate_int( $price_int, -2000, 2000 ) == 0;
-    return ( 0, "invalid price_frac" ) if validate_int( $price_int, 0, 99 ) == 0;
+    return ( 0, "invalid price_int" )  if validate_integer( $price_int, -2000, 2000 ) == 0;
+    return ( 0, "invalid price_frac" ) if validate_integer( $price_int, 0, 99 ) == 0;
 
     return ( 1, "" );
 }
@@ -273,7 +273,7 @@ sub process_line($$$)
         return;
     }
 
-    ( $is_ok, $offset, $price_int ) = extract_price_int( \@tokens, $offset, $size );
+    ( $is_ok, $offset, $price_int ) = extract_price_part( \@tokens, $offset, $size );
 
     if( $is_ok eq 0 )
     {
@@ -282,7 +282,7 @@ sub process_line($$$)
         return;
     }
 
-    ( $is_ok, $offset, $price_frac ) = extract_price_int( \@tokens, $offset, $size );
+    ( $is_ok, $offset, $price_frac ) = extract_price_part( \@tokens, $offset, $size );
 
     if( $is_ok eq 0 )
     {
