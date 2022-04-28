@@ -103,7 +103,7 @@ sub is_id_empty($)
 
     $val = lc $val;
 
-    return $val =~ /^nix$/ or $val =~ /^leer$/;
+    return ( $val =~ /^nix$/ ) || ( $val =~ /^leer$/ ) || ( $val =~ /^trennung$/ );
 }
 
 ###############################################
