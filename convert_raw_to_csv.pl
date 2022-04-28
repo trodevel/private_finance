@@ -144,7 +144,7 @@ sub extract_day($$$)
 
     my ( $is_ok, $new_offset, $val ) = get_integer( $tokens_ref, $offset, $size );
 
-    if( $is_ok eq 1 )
+    if( $is_ok == 1 )
     {
         print "DEBUG: extracted day $val\n";
 
@@ -162,7 +162,7 @@ sub extract_month($$$)
 
     my ( $is_ok, $new_offset, $val ) = get_integer( $tokens_ref, $offset, $size );
 
-    if( $is_ok eq 1 )
+    if( $is_ok == 1 )
     {
         print "DEBUG: extracted month $val\n";
 
@@ -180,7 +180,7 @@ sub extract_year($$$)
 
     my ( $is_ok, $new_offset, $val ) = get_integer( $tokens_ref, $offset, $size );
 
-    if( $is_ok eq 1 )
+    if( $is_ok == 1 )
     {
         print "DEBUG: extracted year $val\n";
 
@@ -205,7 +205,7 @@ sub extract_price_part($$$)
 
     my ( $is_ok, $new_offset, $val ) = get_integer( $tokens_ref, $offset, $size );
 
-    if( $is_ok eq 1 )
+    if( $is_ok == 1 )
     {
         print "DEBUG: extracted price part $val\n";
 
@@ -309,7 +309,7 @@ sub process_line($$$)
 
     ( $is_ok, $offset, $day ) = extract_day( \@tokens, 0, $size );
 
-    if( $is_ok eq 0 )
+    if( $is_ok == 0 )
     {
         print "INFO: cannot extract date from line $line_num: $line\n";
 
@@ -318,7 +318,7 @@ sub process_line($$$)
 
     ( $is_ok, $offset, $month ) = extract_month( \@tokens, $offset, $size );
 
-    if( $is_ok eq 0 )
+    if( $is_ok == 0 )
     {
         print "INFO: cannot extract month from line $line_num: $line\n";
 
@@ -327,7 +327,7 @@ sub process_line($$$)
 
     ( $is_ok, $offset, $year ) = extract_year( \@tokens, $offset, $size );
 
-    if( $is_ok eq 0 )
+    if( $is_ok == 0 )
     {
         print "INFO: cannot extract year from line $line_num: $line\n";
 
@@ -336,7 +336,7 @@ sub process_line($$$)
 
     ( $is_ok, $offset, $price_int ) = extract_price_part( \@tokens, $offset, $size );
 
-    if( $is_ok eq 0 )
+    if( $is_ok == 0 )
     {
         print "INFO: cannot extract price int from line $line_num: $line\n";
 
@@ -345,7 +345,7 @@ sub process_line($$$)
 
     ( $is_ok, $offset, $price_frac ) = extract_price_part( \@tokens, $offset, $size );
 
-    if( $is_ok eq 0 )
+    if( $is_ok == 0 )
     {
         print "INFO: cannot extract price int from line $line_num: $line\n";
 
@@ -354,7 +354,7 @@ sub process_line($$$)
 
     my ( $is_valid, $error_msg ) = validate( $day, $month, $year, $price_int, $price_frac, "", "" );
 
-    if( $is_valid eq 0 )
+    if( $is_valid == 0 )
     {
         print "ERROR: line not valid $line_num: $error_msg: $line\n";
 
