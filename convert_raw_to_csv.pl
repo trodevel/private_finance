@@ -206,7 +206,8 @@ sub validate($$$$$$$)
     return ( 0, "invalid day" )   if validate_day( $day ) == 0;
     return ( 0, "invalid month" ) if validate_month( $month ) == 0;
     return ( 0, "invalid year" )  if validate_year( $year ) == 0;
-#    return ( 0, "invalid price_int" ) if validate_price_int( $price_int ) == 0;
+    return ( 0, "invalid price_int" )  if validate_int( $price_int, -2000, 2000 ) == 0;
+    return ( 0, "invalid price_frac" ) if validate_int( $price_int, 0, 99 ) == 0;
 
     return ( 1, "" );
 }
@@ -290,7 +291,7 @@ sub process_line($$$)
         return;
     }
 
-    my ( $is_valid, $error_msg ) = validate( $day, $month, $year, 0, 0, "", "" );
+    my ( $is_valid, $error_msg ) = validate( $day, $month, $year, $price_int, $price_frac, "", "" );
 
     if( $is_valid eq 0 )
     {
