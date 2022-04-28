@@ -117,6 +117,31 @@ sub extract_month($$$)
 
 ###############################################
 
+sub extract_year($$$)
+{
+    my ( $tokens_ref, $offset, $size ) = @_;
+
+    my ( $is_ok, $new_offset, $val ) = get_integer( $tokens_ref, $offset, $size );
+
+    if( $is_ok eq 1 )
+    {
+        print "DEBUG: extracted year $val\n";
+
+        if( $val < 100 )
+        {
+            $val += 2000;
+
+            print "DEBUG: corrected year $val\n";
+        }
+
+        return ( 1, $new_offset, $val );
+    }
+
+    return ( 0, $offset, 0 );
+}
+
+###############################################
+
 sub process_line($$$)
 {
     my ( $line, $line_num, $file_out ) = @_;
@@ -145,6 +170,7 @@ sub process_line($$$)
     my $offset = 0;
     my $day = 0;
     my $month = 0;
+    my $year = 0;
 
     ( $is_ok, $offset, $day ) = extract_day( \@tokens, 0, $size );
 
@@ -160,6 +186,15 @@ sub process_line($$$)
     if( $is_ok eq 0 )
     {
         print "INFO: cannot extract month from line $line_num: $line\n";
+
+        return;
+    }
+
+    ( $is_ok, $offset, $year ) = extract_year( \@tokens, $offset, $size );
+
+    if( $is_ok eq 0 )
+    {
+        print "INFO: cannot extract year from line $line_num: $line\n";
 
         return;
     }
