@@ -415,7 +415,7 @@ sub process_line($$$)
         return;
     }
 
-    print $file_out "1;$day.$month.$year;$price_int.$price_frac;$category;$sub_category;$owner\n";
+    printf $file_out "1;%04d.%02d.%02d;%d.%02d;%s;%s;%s\n", $year, $month, $day, $price_int, $price_frac, $category, $sub_category, $owner;
 }
 
 ###############################################
