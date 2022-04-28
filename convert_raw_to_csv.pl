@@ -86,6 +86,17 @@ sub is_float($)
 
 ###############################################
 
+sub is_id_connector($)
+{
+    my ( $val ) = @_;
+
+    $val = lc $val;
+
+    return $val =~ /^verbind[[:alpha:]]*$/;
+}
+
+###############################################
+
 sub does_start_with_number($)
 {
     my ( $val ) = @_;
