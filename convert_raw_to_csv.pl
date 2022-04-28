@@ -251,6 +251,8 @@ sub extract_identifier($$$)
         $res += "_${val}";
     }
 
+    $res = lc $res;
+
     print "DEBUG: extracted identifier $res\n";
 
     return ( 1, $offset, $res );
