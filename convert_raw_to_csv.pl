@@ -332,12 +332,13 @@ sub process_line($$$)
     my $price_frac = 0;
     my $category = "";
     my $sub_category = "";
+    my $owner = "";
 
     ( $is_ok, $offset, $day ) = extract_day( \@tokens, 0, $size );
 
     if( $is_ok == 0 )
     {
-        print "INFO: cannot extract date from line $line_num: $line\n";
+        print "ERROR: cannot extract date from line $line_num: $line\n";
 
         return;
     }
@@ -346,7 +347,7 @@ sub process_line($$$)
 
     if( $is_ok == 0 )
     {
-        print "INFO: cannot extract month from line $line_num: $line\n";
+        print "ERROR: cannot extract month from line $line_num: $line\n";
 
         return;
     }
@@ -355,7 +356,7 @@ sub process_line($$$)
 
     if( $is_ok == 0 )
     {
-        print "INFO: cannot extract year from line $line_num: $line\n";
+        print "ERROR: cannot extract year from line $line_num: $line\n";
 
         return;
     }
@@ -364,7 +365,7 @@ sub process_line($$$)
 
     if( $is_ok == 0 )
     {
-        print "INFO: cannot extract price int from line $line_num: $line\n";
+        print "ERROR: cannot extract price int from line $line_num: $line\n";
 
         return;
     }
@@ -373,7 +374,7 @@ sub process_line($$$)
 
     if( $is_ok == 0 )
     {
-        print "INFO: cannot extract price int from line $line_num: $line\n";
+        print "ERROR: cannot extract price int from line $line_num: $line\n";
 
         return;
     }
@@ -382,7 +383,7 @@ sub process_line($$$)
 
     if( $is_ok == 0 )
     {
-        print "INFO: cannot extract category from line $line_num: $line\n";
+        print "ERROR: cannot extract category from line $line_num: $line\n";
 
         return;
     }
@@ -391,7 +392,16 @@ sub process_line($$$)
 
     if( $is_ok == 0 )
     {
-        print "INFO: cannot extract subcategory from line $line_num: $line\n";
+        print "ERROR: cannot extract subcategory from line $line_num: $line\n";
+
+        return;
+    }
+
+    ( $is_ok, $offset, $owner ) = extract_identifier( \@tokens, $offset, $size );
+
+    if( $is_ok == 0 )
+    {
+        print "ERROR: cannot extract owner from line $line_num: $line\n";
 
         return;
     }
