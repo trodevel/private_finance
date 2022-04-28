@@ -257,9 +257,9 @@ sub extract_identifier($$$)
 
         ( $is_ok, $new_offset, $val ) = get_string( $tokens_ref, $new_offset, $size );
 
-        return ( 0, $offset, "" ) if( $is_ok == 0 )
+        return ( 0, $offset, "" ) if( $is_ok == 0 );
 
-        $res += "_${val}";
+        $res .= "_${val}";
     }
 
     $res = lc $res;
