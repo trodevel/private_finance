@@ -50,6 +50,15 @@ sub validate_day($)
 
 ###############################################
 
+sub validate_month($)
+{
+    my ( $val ) = @_;
+
+    return validate_integer( $val, 1, 12 );
+}
+
+###############################################
+
 sub is_integer($)
 {
     my ( $val ) = @_;
