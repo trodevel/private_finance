@@ -181,6 +181,24 @@ sub extract_year($$$)
 
 ###############################################
 
+sub extract_price_part($$$)
+{
+    my ( $tokens_ref, $offset, $size ) = @_;
+
+    my ( $is_ok, $new_offset, $val ) = get_integer( $tokens_ref, $offset, $size );
+
+    if( $is_ok eq 1 )
+    {
+        print "DEBUG: extracted price part $val\n";
+
+        return ( 1, $new_offset, $val );
+    }
+
+    return ( 0, $offset, 0 );
+}
+
+###############################################
+
 sub validate($$$$$$$)
 {
     my ( $day, $month, $year, $price_int, $price_frac, $categ, $subcateg ) = @_;
@@ -224,6 +242,8 @@ sub process_line($$$)
     my $day = 0;
     my $month = 0;
     my $year = 0;
+    my $price_int = 0;
+    my $price_frac = 0;
 
     ( $is_ok, $offset, $day ) = extract_day( \@tokens, 0, $size );
 
@@ -248,6 +268,24 @@ sub process_line($$$)
     if( $is_ok eq 0 )
     {
         print "INFO: cannot extract year from line $line_num: $line\n";
+
+        return;
+    }
+
+    ( $is_ok, $offset, $price_int ) = extract_price_int( \@tokens, $offset, $size );
+
+    if( $is_ok eq 0 )
+    {
+        print "INFO: cannot extract price int from line $line_num: $line\n";
+
+        return;
+    }
+
+    ( $is_ok, $offset, $price_frac ) = extract_price_int( \@tokens, $offset, $size );
+
+    if( $is_ok eq 0 )
+    {
+        print "INFO: cannot extract price int from line $line_num: $line\n";
 
         return;
     }
