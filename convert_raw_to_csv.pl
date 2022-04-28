@@ -251,9 +251,9 @@ sub extract_identifier($$$)
 
         ( $is_ok, $new_offset, $val ) = get_string( $tokens_ref, $offset, $size );
 
-        break if( $is_ok == 0 );
+        last if( $is_ok == 0 );
 
-        break if( is_id_connector( $val ) == 0 );
+        last if( is_id_connector( $val ) == 0 );
 
         ( $is_ok, $new_offset, $val ) = get_string( $tokens_ref, $new_offset, $size );
 
