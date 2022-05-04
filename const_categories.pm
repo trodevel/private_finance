@@ -33,7 +33,10 @@ package const_categories;
 
 our @categories =
 (
-    "urlaub_paris"
+    "urlaub_paris",
+    "essen",
+    "kleidung",
+    "tanken"
 );
 
 ###############################################
