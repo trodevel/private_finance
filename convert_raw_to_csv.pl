@@ -332,14 +332,14 @@ sub process_line($$$)
     {
         print "ERROR: empty line $line_num\n";
 
-        return;
+        return 0;
     }
 
     if( is_integer( $tokens[0] ) == 0 )
     {
         print "WARNING: ignoring line $line_num: $line\n";
 
-        return;
+        return 1;
     }
 
     my $is_ok = 0;
@@ -359,7 +359,7 @@ sub process_line($$$)
     {
         print "ERROR: cannot extract date from line $line_num: $line\n";
 
-        return;
+        return 0;
     }
 
     ( $is_ok, $offset, $month ) = extract_month( \@tokens, $offset, $size );
@@ -368,7 +368,7 @@ sub process_line($$$)
     {
         print "ERROR: cannot extract month from line $line_num: $line\n";
 
-        return;
+        return 0;
     }
 
     ( $is_ok, $offset, $year ) = extract_year( \@tokens, $offset, $size );
@@ -377,7 +377,7 @@ sub process_line($$$)
     {
         print "ERROR: cannot extract year from line $line_num: $line\n";
 
-        return;
+        return 0;
     }
 
     ( $is_ok, $offset, $price_int ) = extract_price_part( \@tokens, $offset, $size );
@@ -386,7 +386,7 @@ sub process_line($$$)
     {
         print "ERROR: cannot extract price int from line $line_num: $line\n";
 
-        return;
+        return 0;
     }
 
     ( $is_ok, $offset, $price_frac ) = extract_price_part( \@tokens, $offset, $size );
@@ -395,7 +395,7 @@ sub process_line($$$)
     {
         print "ERROR: cannot extract price int from line $line_num: $line\n";
 
-        return;
+        return 0;
     }
 
     ( $is_ok, $offset, $category ) = extract_identifier( \@tokens, $offset, $size );
@@ -404,7 +404,7 @@ sub process_line($$$)
     {
         print "ERROR: cannot extract category from line $line_num: $line\n";
 
-        return;
+        return 0;
     }
 
     ( $is_ok, $offset, $sub_category ) = extract_identifier( \@tokens, $offset, $size );
@@ -413,7 +413,7 @@ sub process_line($$$)
     {
         print "ERROR: cannot extract subcategory from line $line_num: $line\n";
 
-        return;
+        return 0;
     }
 
     ( $is_ok, $offset, $owner ) = extract_identifier( \@tokens, $offset, $size );
@@ -422,7 +422,7 @@ sub process_line($$$)
     {
         print "ERROR: cannot extract owner from line $line_num: $line\n";
 
-        return;
+        return 0;
     }
 
     my ( $is_valid, $error_msg ) = validate( $day, $month, $year, $price_int, $price_frac, $category, $sub_category, $owner );
@@ -431,10 +431,12 @@ sub process_line($$$)
     {
         print "ERROR: line not valid $line_num: $error_msg: $line\n";
 
-        return;
+        return 0;
     }
 
     printf $file_out "1;%04d.%02d.%02d;%d.%02d;%s;%s;%s\n", $year, $month, $day, $price_int, $price_frac, $category, $sub_category, $owner;
+
+    return 1;
 }
 
 ###############################################
