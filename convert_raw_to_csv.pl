@@ -469,7 +469,9 @@ sub process($$)
         # skip comments
         next if $line =~ /^#/;
 
-        process_line( $line, $num_lines, $file_out );
+        my $res = process_line( $line, $num_lines, $file_out );
+
+        die "cannot process line $num_lines" if( $res == 0 );
     }
 
     print "INFO: read $num_lines line(s) from file $filename_in\n";
