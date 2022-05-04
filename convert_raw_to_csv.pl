@@ -72,6 +72,20 @@ sub validate_year($)
 
 ###############################################
 
+sub validate_category($)
+{
+    my ( $val ) = @_;
+
+    foreach my $v (@const_categories::categories)
+    {
+        return 1 if( $v eq $val );
+    }
+
+    return 0;
+}
+
+###############################################
+
 sub is_integer($)
 {
     my ( $val ) = @_;

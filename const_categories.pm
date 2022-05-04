@@ -31,7 +31,7 @@ use 5.010;
 
 package const_categories;
 
-my @categories =
+our @categories =
 (
     "urlaub_paris"
 );
